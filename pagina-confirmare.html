@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmare Acces - Echilibru Digital</title>
+    <!-- Sistem dual de verificare: Token One-Time + Cod Email -->
+    <style>
+        /* ===================================================
+           ECHILIBRU DIGITAL - PAGINA CONFIRMARE (REORGANIZAT)
+           ===================================================
+           Structura CSS:
+             1. Variabile & Reset
+             2. Card Principal
+             3. Credentials Box
+             4. Inputs & Butoane
+             5. Status Badges
+             6. Animatii
+             7. Responsive
+           =================================================== */
+
+        /* --- 1. VARIABILE & RESET --- */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #532b66 0%, #1c1c1c 100%);
+            --accent-color: #ffd700;
+            --success-color: #4caf50;
+            --bg-glass: rgba(25, 25, 25, 0.7);
+        }
+
+        html {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            overflow: hidden;
+        }
+
+        /* --- 2. CARD PRINCIPAL --- */
+        .instant-access-card {
+            background: var(--bg-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px 30px;
+            margin: 40px auto;
+            text-align: center;
+            display: block;
+            animation: fadeIn 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            width: 92%;
+            max-width: 480px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #fff;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* --- 3. CREDENTIALS BOX --- */
+        .credentials-box {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 25px;
+            border-radius: 16px;
+            margin-top: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: left;
+        }
+
+        .credential-item {
+            margin: 18px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .credential-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 700;
+        }
+
+        .credential-value-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 12px;
+        }
+
+        .credential-value {
+            font-size: 15px;
+            color: #fff;
+            font-family: 'JetBrains Mono', monospace;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+        }
+
+        .copy-small-btn {
+            background: var(--primary-gradient);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            white-space: nowrap;
+            outline: none;
+        }
+
+        .copy-small-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(83, 43, 102, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* --- 4. INPUTS & BUTOANE --- */
+        .email-input,
+        .code-input {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 16px;
+            margin: 0 auto 20px auto;
+            box-sizing: border-box;
+            outline: none;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+
+        .code-input {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 8px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .email-input:focus,
+        .code-input:focus {
+            border-color: #532b66;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .action-btn {
+            display: block;
+            width: 100%;
+            margin-top: 15px;
+            background: var(--primary-gradient);
+            color: #fff;
+            padding: 18px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            box-sizing: border-box;
+            line-height: 1;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(83, 43, 102, 0.4);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .action-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .instruction-text {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 15px;
+            line-height: 1.6;
+            margin: 0 auto 25px auto;
+            max-width: 320px;
+            font-weight: 400;
+        }
+
+        .footer-note {
+            color: rgba(255, 255, 255, 0.35);
+            font-size: 11px;
+            margin-top: 25px;
+            line-height: 1.5;
+            padding: 0 10px;
+        }
+
+        /* --- 5. STATUS BADGES --- */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 20px;
+        }
+
+        .status-loading {
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .status-success {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4caf50;
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .status-error {
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.2);
+        }
+
+        /* --- 6. ANIMATII --- */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading-dots:after {
+            content: '.';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+
+        @keyframes dots {
+
+            0%,
+            20% {
+                content: '.';
+            }
+
+            40% {
+                content: '..';
+            }
+
+            60% {
+                content: '...';
+            }
+
+            80%,
+            100% {
+                content: '';
+            }
+        }
+
+        /* --- 7. RESPONSIVE --- */
+        @media (max-width: 600px) {
+            .instant-access-card {
+                padding: 25px 20px;
+                margin: 10px auto;
+                border-radius: 20px;
+            }
+
+            .credential-value {
+                font-size: 14px;
+            }
+
+            .action-btn {
+                padding: 16px;
+                font-size: 15px;
+                margin-top: 10px;
+            }
+
+            .credentials-box {
+                padding: 15px;
+                margin-top: 15px;
+            }
+
+            .footer-note {
+                margin-top: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="instant-access-container" class="instant-access-card">
+
+        <!-- 1. LOADING STATE (Default) -->
+        <div id="state-loading">
+            <div class="status-badge status-loading">
+                Procesare acces instant<span class="loading-dots"></span>
+            </div>
+            <p style="color: rgba(255,255,255,0.6); font-size: 15px; margin: 0; line-height: 1.4;">
+                Activăm contul tău în timp real...<br>Te rugăm să nu închizi această pagină.
+            </p>
+        </div>
+
+        <!-- 2. EMAIL VERIFICATION STATE (Step 1) -->
+        <div id="state-email-verify" style="display: none;">
+            <div class="status-badge status-loading">🔐 Verificare Securizată</div>
+            <p style="color: #fff; font-size: 18px; font-weight: 700; margin-bottom: 8px;">Aproape gata!</p>
+            <p class="instruction-text">Introdu adresa ta de email pentru a primi un cod de securitate:</p>
+            <input type="email" id="email-input" class="email-input" placeholder="email@exemplu.com">
+            <button id="btn-send-code" class="action-btn" onclick="trimiteCodeverificare()">Trimite Cod</button>
+            <p id="email-error"
+                style="color: #ff6b6b; font-size: 13px; margin-top: 15px; display: none; font-weight: 500;"></p>
+        </div>
+
+        <!-- 3. CODE VERIFICATION STATE (Step 2) -->
+        <div id="state-code-verify" style="display: none;">
+            <div class="status-badge status-loading">📧 Cod trimis!</div>
+            <p style="color: #fff; font-size: 18px; font-weight: 700; margin-bottom: 8px;">Verifică-ți emailul</p>
+            <p class="instruction-text">Am trimis un cod de 6 cifre către <strong id="email-sent-to"></strong></p>
+            <input type="text" id="code-input" class="code-input" placeholder="000000" maxlength="6" pattern="[0-9]*"
+                inputmode="numeric">
+            <button id="btn-verify-code" class="action-btn" onclick="verificaCod()">Verifică Cod</button>
+            <p id="code-error"
+                style="color: #ff6b6b; font-size: 13px; margin-top: 15px; display: none; font-weight: 500;"></p>
+            <p style="color: rgba(255,255,255,0.3); font-size: 12px; margin-top: 20px;">
+                Nu ai primit codul? <a href="#" onclick="event.preventDefault(); showEmailVerify();"
+                    style="color: #ffd700; text-decoration: none;">Trimite din nou</a>
+            </p>
+        </div>
+
+        <!-- 4. SUCCESS STATE -->
+        <div id="state-success" style="display: none;">
+            <div class="status-badge status-success">✨ Acces activat!</div>
+            <p style="color: #fff; font-size: 22px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px;">
+                Felicitări!</p>
+            <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin: 0 0 20px 0;">Copiază parola și accesează
+                cursul:</p>
+
+            <div class="credentials-box">
+                <div class="credential-item">
+                    <span class="credential-label">Adresa de email</span>
+                    <div class="credential-value-row">
+                        <span class="credential-value" id="user-email">...</span>
+                    </div>
+                </div>
+                <div class="credential-item">
+                    <span class="credential-label">Parola ta</span>
+                    <div class="credential-value-row">
+                        <span class="credential-value" id="user-pass">...</span>
+                        <button class="copy-small-btn" onclick="copyValue('user-pass')">Copiaza</button>
+                    </div>
+                </div>
+            </div>
+
+            <p class="footer-note">
+                * Factura și datele au fost trimise și pe email. Username-ul și parola sunt aceleași pentru toate
+                cursurile tale.
+            </p>
+            <button onclick="copyAndRedirect()" class="action-btn">Accesează contul tău</button>
+        </div>
+    </div>
+
+    <!-- ===================================================
+         JAVASCRIPT
+         Structura:
+           1. Configurare
+           2. Utilitare UI (hideAllStates, show*)
+           3. Copy & Redirect
+           4. Trimitere Cod Verificare
+           5. Verificare Cod
+           6. Initializare Flow (Token / Session / Email)
+         =================================================== -->
+    <script>
+        // ===================================================
+        // 1. CONFIGURARE
+        // ===================================================
+        const SCRIPT_URL = 'https://script.google.com/macros/s/(codul meu)';
+        var currentEmail = '';
+
+        // ===================================================
+        // 2. UTILITARE UI
+        // ===================================================
+        function hideAllStates() {
+            document.getElementById('state-loading').style.display = 'none';
+            document.getElementById('state-email-verify').style.display = 'none';
+            document.getElementById('state-code-verify').style.display = 'none';
+            document.getElementById('state-success').style.display = 'none';
+        }
+
+        function showSuccess(email, parola) {
+            hideAllStates();
+            document.getElementById('state-success').style.display = 'block';
+            document.getElementById('user-email').textContent = email;
+            document.getElementById('user-pass').textContent = parola;
+        }
+
+        function showEmailVerify() {
+            hideAllStates();
+            document.getElementById('state-email-verify').style.display = 'block';
+        }
+
+        function showCodeVerify(email) {
+            hideAllStates();
+            currentEmail = email;
+            document.getElementById('email-sent-to').textContent = email;
+            document.getElementById('state-code-verify').style.display = 'block';
+            document.getElementById('code-input').focus();
+        }
+
+        // ===================================================
+        // 3. COPY & REDIRECT
+        // ===================================================
+        function copyAndRedirect() {
+            const passText = document.getElementById('user-pass').innerText;
+            const btn = event.currentTarget;
+
+            // Invalidam cache-ul de acces pentru verificare noua
+            sessionStorage.setItem('invalidate_access_cache', 'true');
+
+            navigator.clipboard.writeText(passText).then(() => {
+                btn.innerText = '✓ Parolă copiată! Se încarcă...';
+                btn.style.background = '#4caf50';
+                setTimeout(() => { window.location.href = '/accesare'; }, 800);
+            }).catch(() => {
+                window.location.href = '/accesare';
+            });
+        }
+
+        function copyValue(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            const btn = event.currentTarget;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = '✓ Copiat';
+                btn.style.background = '#4caf50';
+                btn.style.borderColor = '#4caf50';
+                btn.style.color = '#fff';
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = '';
+                    btn.style.borderColor = '';
+                    btn.style.color = '';
+                }, 2000);
+            });
+        }
+
+        // ===================================================
+        // 4. TRIMITERE COD VERIFICARE
+        // ===================================================
+        async function trimiteCodeverificare() {
+            const email = document.getElementById('email-input').value.trim();
+            const btn = document.getElementById('btn-send-code');
+            const errorEl = document.getElementById('email-error');
+
+            if (!email || !email.includes('@')) {
+                errorEl.textContent = 'Te rugăm să introduci o adresă de email validă.';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Se trimite cod...';
+            errorEl.style.display = 'none';
+
+            try {
+                const apiCall = `${SCRIPT_URL}?action=solicitaCod&email=${encodeURIComponent(email)}`;
+                const response = await fetch(apiCall);
+                const data = await response.json();
+
+                if (data.success) {
+                    showCodeVerify(email);
+                } else {
+                    errorEl.textContent = data.error || 'Nu am găsit nicio achiziție pentru acest email.';
+                    errorEl.style.display = 'block';
+                    btn.disabled = false;
+                    btn.textContent = 'Trimite Cod';
+                }
+            } catch (err) {
+                errorEl.textContent = 'Eroare de conexiune. Te rugăm să reîncarci pagina.';
+                errorEl.style.display = 'block';
+                btn.disabled = false;
+                btn.textContent = 'Trimite Cod';
+            }
+        }
+
+        // ===================================================
+        // 5. VERIFICARE COD
+        // ===================================================
+        async function verificaCod() {
+            const cod = document.getElementById('code-input').value.trim();
+            const btn = document.getElementById('btn-verify-code');
+            const errorEl = document.getElementById('code-error');
+
+            if (!cod || cod.length !== 6) {
+                errorEl.textContent = 'Te rugăm să introduci codul de 6 cifre.';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Se verifică...';
+            errorEl.style.display = 'none';
+
+            try {
+                const apiCall = `${SCRIPT_URL}?action=verificaCod&email=${encodeURIComponent(currentEmail)}&cod=${encodeURIComponent(cod)}`;
+                const response = await fetch(apiCall);
+                const data = await response.json();
+
+                if (data.success) {
+                    showSuccess(data.email, data.parola);
+                } else {
+                    errorEl.textContent = data.error || 'Cod incorect sau expirat.';
+                    errorEl.style.display = 'block';
+                    btn.disabled = false;
+                    btn.textContent = 'Verifică Cod';
+                    document.getElementById('code-input').value = '';
+                    document.getElementById('code-input').focus();
+                }
+            } catch (err) {
+                errorEl.textContent = 'Eroare de conexiune. Te rugăm să reîncarci pagina.';
+                errorEl.style.display = 'block';
+                btn.disabled = false;
+                btn.textContent = 'Verifică Cod';
+            }
+        }
+
+        // ===================================================
+        // 6. INITIALIZARE FLOW
+        // Cale 1: Token (instant)
+        // Cale 2: Session ID Stripe (1-2s)
+        // Cale 3: Fallback email + cod
+        // ===================================================
+        async function initFlow() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            const sessionId = urlParams.get('session_id');
+
+            // CALE 1: Token one-time
+            if (token) {
+                try {
+                    const apiCall = `${SCRIPT_URL}?action=verificaToken&token=${token}`;
+                    const response = await fetch(apiCall);
+                    const data = await response.json();
+                    if (data.success) { showSuccess(data.email, data.parola); return; }
+                } catch (err) {
+                    console.log('Token verification failed:', err);
+                }
+            }
+
+            // CALE 2: Session ID Stripe
+            if (sessionId) {
+                try {
+                    const apiCall = `${SCRIPT_URL}?action=proceseazaSesiuneStripe&session_id=${sessionId}`;
+                    const response = await fetch(apiCall);
+                    const data = await response.json();
+                    if (data.success) { showSuccess(data.email, data.parola); return; }
+                    else { showEmailVerify(); }
+                } catch (err) {
+                    console.log('Session processing failed:', err);
+                    showEmailVerify();
+                }
+                return;
+            }
+
+            // CALE 3: Fallback email + cod
+            showEmailVerify();
+        }
+
+        window.addEventListener('load', initFlow);
+    </script>
+</body>
+
+</html>

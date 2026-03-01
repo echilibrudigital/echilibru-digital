@@ -1,0 +1,435 @@
+<!--
+  ===================================================
+  OVERLAY ACCES LECTII - CURS 1 (ECHILIBRU DIGITAL)
+  Verificare acces + Countdown trial + Protectie
+  ===================================================
+-->
+
+<style>
+    /* ===================================================
+       OVERLAY LECTII CURS 1 (REORGANIZAT)
+       ===================================================
+       Structura CSS:
+         1. Variabile
+         2. Overlay Backdrop + Content
+         3. Butoane
+         4. Countdown Bar
+         5. Animatii
+         6. Protectie Continut
+         7. Responsive
+       =================================================== */
+
+    /* --- 1. VARIABILE --- */
+    :root {
+        --accent-color: #cc91e6;
+        --btn-gradient: linear-gradient(135deg, #532b66 0%, #7d3c98 100%);
+        --bar-bg: #0f0f0f;
+    }
+
+    /* --- 2. OVERLAY BACKDROP + CONTENT --- */
+    #overlay-acces {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.92);
+        z-index: 999999;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+    }
+
+    #overlay-content {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--bg-glass);
+        padding: 40px 30px;
+        border-radius: 20px;
+        max-width: 480px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8);
+        border: 1px solid rgba(204, 145, 230, 0.3);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        z-index: 1000000;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        box-sizing: border-box;
+    }
+
+    #overlay-content h2 {
+        color: #ffffff;
+        font-size: 24px;
+        margin-bottom: 12px;
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    #overlay-content p {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 15px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    #overlay-bogo-image {
+        display: none;
+        margin: 0 auto 15px auto;
+        width: 100%;
+        max-width: 280px;
+    }
+
+    /* --- 3. BUTOANE --- */
+    #overlay-content .btn-primary {
+        display: block;
+        width: 100%;
+        padding: 16px;
+        box-sizing: border-box;
+        background: var(--btn-gradient);
+        color: white !important;
+        text-decoration: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        transition: all 0.3s;
+        box-shadow: 0 8px 15px rgba(204, 145, 230, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 12px;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    #overlay-content .btn-secondary {
+        display: block;
+        width: 100%;
+        padding: 14px 20px;
+        box-sizing: border-box;
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--accent-color) !important;
+        text-decoration: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 600;
+        border: 1px solid rgba(204, 145, 230, 0.3);
+        cursor: pointer;
+    }
+
+    .separator {
+        display: block;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 12px;
+        margin: 10px 0 12px 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* --- 4. COUNTDOWN BAR --- */
+    #trial-countdown-bar {
+        display: none;
+        position: fixed;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--bar-bg);
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 50px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        z-index: 9998;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        border: 1px solid rgba(204, 145, 230, 0.2);
+        white-space: nowrap;
+        animation: slideUpFloat 0.6s forwards;
+    }
+
+    #trial-countdown-text span {
+        color: var(--accent-color);
+        font-weight: 800;
+        background: rgba(204, 145, 230, 0.1);
+        padding: 2px 8px;
+        border-radius: 6px;
+        margin-left: 4px;
+    }
+
+    .pulse-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--accent-color);
+        border-radius: 50%;
+        box-shadow: 0 0 10px var(--accent-color);
+        animation: pulse 2s infinite;
+    }
+
+    /* --- 5. ANIMATII --- */
+    @keyframes slideUpFloat {
+        from {
+            opacity: 0;
+            transform: translate(-50%, 40px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(204, 145, 230, 0.7);
+        }
+
+        70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 8px rgba(204, 145, 230, 0);
+        }
+
+        100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(204, 145, 230, 0);
+        }
+    }
+
+    /* --- 6. PROTECTIE CONTINUT --- */
+    body,
+    * {
+        -webkit-user-select: none !important;
+        user-select: none !important;
+    }
+
+    img,
+    video {
+        -webkit-user-drag: none !important;
+        pointer-events: auto;
+    }
+
+    /* --- 7. RESPONSIVE --- */
+    @media (max-width: 600px) {
+        #overlay-content {
+            padding: 30px 20px;
+            width: 92%;
+        }
+
+        #overlay-content h2 {
+            font-size: 20px;
+        }
+
+        #overlay-content p {
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        #overlay-content .btn-primary {
+            font-size: 15px;
+            padding: 14px;
+        }
+
+        #trial-countdown-bar {
+            bottom: 15px;
+            padding: 10px 15px;
+            font-size: 13px;
+            border-radius: 100px;
+            width: 85%;
+        }
+    }
+</style>
+
+<!-- HTML OVERLAY -->
+<div id="overlay-acces">
+    <div id="overlay-content">
+        <div id="overlay-bogo-image">
+            <img src="https://echilibrudigital.ro/lib/l1fl3q/Miniatura-OFERTA-finala-mldjkcdq.svg"
+                alt="Ofertă BOGO: Cumperi 1, primești 2x"
+                style="width: 100%; height: auto; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
+        </div>
+        <h2 id="overlay-title">Verificare acces...</h2>
+        <p id="overlay-message">Te rugăm să aștepți...</p>
+        <div id="overlay-actions">
+            <a href="https://echilibrudigital.ro/oferta-finala" id="overlay-btn-main" class="btn-primary"
+                style="display: none;">Activează Oferta 1+1 (99 RON)</a>
+            <div id="overlay-sep" class="separator" style="display: none;">SAU</div>
+            <a href="/recomanda-cursul" id="overlay-btn-secondary" class="btn-secondary"
+                style="display: none;">Recomandă și câștigă</a>
+        </div>
+    </div>
+</div>
+
+<!-- COUNTDOWN BAR -->
+<div id="trial-countdown-bar">
+    <div class="pulse-dot"></div>
+    <p id="trial-countdown-text"></p>
+</div>
+
+<!-- ===================================================
+     JAVASCRIPT
+     Structura:
+       1. Configurare
+       2. Cache Management
+       3. Verificare Acces API
+       4. Countdown Timer
+       5. Handle Access Denied
+       6. Protectie Continut
+     =================================================== -->
+<script>
+    // 1. CONFIGURARE
+    const SCRIPT_URL = 'https://script.google.com/macros/s/(codul meu)';
+    const PRODUS = 'curs1';
+    const CACHE_DURATION = 60000; // 1 minut
+
+    (async function () {
+        'use strict';
+        const overlay = document.getElementById('overlay-acces');
+        const title = document.getElementById('overlay-title');
+        const message = document.getElementById('overlay-message');
+        const btnMain = document.getElementById('overlay-btn-main');
+        const btnSec = document.getElementById('overlay-btn-secondary');
+        const separator = document.getElementById('overlay-sep');
+        const bogoImage = document.getElementById('overlay-bogo-image');
+        const userEmail = localStorage.getItem('userEmail');
+        const userParola = localStorage.getItem('userParola');
+
+        if (!userEmail || !userParola) { window.location.href = '/accesare'; return; }
+
+        // Invalidare cache daca semnalat
+        const invalidateSignal = sessionStorage.getItem('invalidate_access_cache');
+        if (invalidateSignal) {
+            clearAllAccessCache();
+            sessionStorage.removeItem('invalidate_access_cache');
+        }
+
+        // 2. CACHE MANAGEMENT
+        function getCachedAccess() {
+            const cacheKey = `access_${PRODUS}_${userEmail}`;
+            const cached = localStorage.getItem(cacheKey);
+            if (!cached) return null;
+            try {
+                const data = JSON.parse(cached);
+                const now = new Date().getTime();
+                if (now - data.timestamp < CACHE_DURATION) {
+                    if (data.result.motiv === 'trial_activ' && data.result.expirareTimestamp) {
+                        if (new Date().getTime() >= data.result.expirareTimestamp) {
+                            localStorage.removeItem(cacheKey);
+                            return null;
+                        }
+                    }
+                    return data.result;
+                }
+                localStorage.removeItem(cacheKey);
+                return null;
+            } catch (e) { localStorage.removeItem(cacheKey); return null; }
+        }
+
+        function setCachedAccess(result) {
+            const cacheKey = `access_${PRODUS}_${userEmail}`;
+            localStorage.setItem(cacheKey, JSON.stringify({ timestamp: new Date().getTime(), result: result }));
+        }
+
+        function clearAllAccessCache() {
+            if (userEmail) {
+                localStorage.removeItem(`access_curs1_${userEmail}`);
+                localStorage.removeItem(`access_curs_parinti_${userEmail}`);
+                localStorage.removeItem(`access_pachet_${userEmail}`);
+            }
+        }
+        window.clearAccessCache = clearAllAccessCache;
+
+        // Verifica cache
+        const cachedData = getCachedAccess();
+        if (cachedData) {
+            if (cachedData.areAcces) {
+                if (cachedData.motiv === 'trial_activ' && cachedData.expirareTimestamp) {
+                    setupCountdown(cachedData.expirareTimestamp);
+                }
+                return;
+            } else {
+                handleAccessDenied(cachedData);
+                return;
+            }
+        }
+
+        // 3. VERIFICARE ACCES API
+        try {
+            const url = `${SCRIPT_URL}?action=verificaAccesCurs&email=${encodeURIComponent(userEmail)}&produs=${PRODUS}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            setCachedAccess(data);
+
+            if (data.areAcces) {
+                overlay.style.display = 'none';
+                if (data.motiv === 'trial_activ' && data.expirareTimestamp) {
+                    setupCountdown(data.expirareTimestamp);
+                }
+                return;
+            }
+            handleAccessDenied(data);
+        } catch (error) {
+            overlay.style.display = 'block';
+        }
+
+        // 4. COUNTDOWN TIMER
+        function setupCountdown(targetTime) {
+            const barra = document.getElementById('trial-countdown-bar');
+            const text = document.getElementById('trial-countdown-text');
+            const updateCountdown = () => {
+                const acum = new Date().getTime();
+                const df = targetTime - acum;
+                if (df <= 0) {
+                    clearAllAccessCache();
+                    text.innerHTML = `🎁 <strong>Ofertă Finală:</strong> Trial expirat. Vezi oferta!`;
+                    setTimeout(() => window.location.reload(), 2000);
+                    return;
+                }
+                const z = Math.floor(df / (1000 * 60 * 60 * 24));
+                const h = Math.floor((df % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((df % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((df % (1000 * 60)) / 1000);
+                text.innerHTML = `Timp rămas pentru acces gratuit: <span>${z}z ${h}h ${m}m ${s}s</span>`;
+            };
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+            barra.style.display = 'flex';
+        }
+
+        // 5. HANDLE ACCESS DENIED
+        function handleAccessDenied(data) {
+            overlay.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+
+            if (data.motiv === 'trial_expirat' || data.motiv === 'nu_achizitionat') {
+                bogoImage.style.display = 'block';
+                title.innerHTML = '🎁 Accesul gratuit a expirat!';
+                message.innerHTML = `Nu lăsa progresul să se piardă! Deblochează accesul pe viață acum și profită de oferta momentului:<br><br>
+                <span style="color:#cc91e6; font-weight:bold; font-size:1.1em">⚡ Oferta BOGO: cumperi 1, primești 2</span>`;
+                btnMain.style.display = 'block';
+                separator.style.display = 'block';
+                separator.textContent = 'SAU';
+                btnSec.style.display = 'block';
+                btnSec.textContent = 'Recomandă și câștigă';
+            }
+            else if (data.motiv === 'trial_activ_alt_curs') {
+                title.textContent = '🎯 Ai acces la celălalt curs!';
+                message.innerHTML = `Ai acces trial la <strong>celălalt curs</strong>.<br><br>Te redirecționăm...`;
+                btnMain.textContent = 'Accesează Cursul';
+                btnMain.href = data.cursDisponibil;
+                btnMain.style.display = 'block';
+                window.location.href = data.cursDisponibil;
+            }
+        }
+    })();
+
+    // 6. PROTECTIE CONTINUT
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('video').forEach(v => {
+            v.removeAttribute('download');
+            v.controlsList = 'nodownload noremoteplayback';
+        });
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('selectstart', e => e.preventDefault());
+    });
+</script>

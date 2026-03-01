@@ -1,0 +1,1310 @@
+﻿<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Recomandari - Echilibru Digital</title>
+    <style>
+        /* ===================================================
+           ECHILIBRU DIGITAL - PAGINA RECOMANDARE (REORGANIZAT)
+           ===================================================
+           Structura CSS:
+             1. Reset & Base
+             2. Banner Principal (Step 1 + Step 2)
+             3. Dashboard Content (Header, Stats, Referral Link)
+             4. Sistem Plati (Tabs, Forms, Inputs)
+             5. Widget Social Proof
+             6. Loading Spinner
+             7. Protectie Continut
+             8. Responsive (toate @media grupate)
+           =================================================== */
+
+        /* --- 1. RESET & BASE --- */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Asap-Italic_Variablefont', 'Asap', sans-serif;
+            background: transparent;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        img,
+        video {
+            -webkit-user-drag: none;
+            user-drag: none;
+            pointer-events: auto;
+        }
+
+        /* --- 2. BANNER PRINCIPAL --- */
+        #discountBanner {
+            display: none;
+            position: fixed;
+            bottom: 5px;
+            left: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #532b66 0%, #1c1c1c 100%);
+            color: #fff;
+            padding: 0;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            z-index: 9999;
+            max-width: 500px;
+            margin: 0 auto;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #discountBanner.show {
+            display: block;
+            animation: slideUpFast 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes slideUpFast {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .banner-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 20px;
+            cursor: pointer;
+            line-height: 1;
+            z-index: 20;
+            padding: 5px;
+            transition: color 0.2s;
+            display: none;
+        }
+
+        .banner-close.show {
+            display: block;
+        }
+
+        .banner-close:hover {
+            color: #fff;
+        }
+
+        /* Step 1 - Buton trigger */
+        #step1 {
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .step1-trigger-btn {
+            background: #fff;
+            color: #3f204d;
+            border: none;
+            padding: 14px 20px;
+            font-size: 15px;
+            max-width: 100%;
+            width: auto;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .step1-trigger-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Step 2 - Dashboard expandat */
+        #step2 {
+            display: none;
+            padding: 18px 20px 16px 20px;
+            text-align: center;
+            max-height: 95vh;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        #step2::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sheet-handle-container {
+            display: none !important;
+        }
+
+        /* --- 3. DASHBOARD CONTENT --- */
+        .premium-header {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .header-text-gradient {
+            background: linear-gradient(90deg, #FFD700, #ffec8b, #FFD700);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-icon {
+            font-style: normal;
+        }
+
+        .premium-text {
+            font-size: 13px;
+            line-height: 1.4;
+            color: #e0d0e6;
+            margin-bottom: 12px;
+        }
+
+        /* Statistici */
+        .stats-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat-box {
+            flex: 1;
+            min-width: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: #FFD700;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        /* Link referral */
+        .referral-link-container {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .referral-link-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .referral-link-display {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .referral-link-text {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #fff;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .copy-btn {
+            background: #FFD700;
+            color: #3f204d;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .copy-btn:hover {
+            background: #ffec8b;
+            transform: scale(1.05);
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Regulament + Footer */
+        .regulament-btn {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .regulament-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .footer-note {
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 10px;
+            line-height: 1.3;
+        }
+
+        /* --- 4. SISTEM PLATI --- */
+        .payment-methods-section {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: none;
+        }
+
+        .payment-methods-section.active {
+            display: block;
+        }
+
+        .payment-header {
+            font-size: 13px;
+            font-weight: 700;
+            color: #FFD700;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .payment-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .payment-tab {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .payment-tab:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .payment-tab.active {
+            background: #FFD700;
+            color: #3f204d;
+            border-color: #FFD700;
+        }
+
+        .payment-form {
+            display: none;
+        }
+
+        .payment-form.active {
+            display: block;
+        }
+
+        .payment-input-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 6px;
+            display: block;
+            text-align: left;
+        }
+
+        .payment-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #fff;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+
+        .payment-input:focus {
+            outline: none;
+            border-color: #FFD700;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .payment-input.error {
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .error-message {
+            font-size: 10px;
+            color: #ff6b6b;
+            margin-top: -6px;
+            margin-bottom: 10px;
+            text-align: left;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .save-payment-btn {
+            width: 100%;
+            background: #FFD700;
+            color: #3f204d;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .save-payment-btn:hover {
+            background: #ffec8b;
+            transform: translateY(-2px);
+        }
+
+        .save-payment-btn:active {
+            transform: translateY(0);
+        }
+
+        .save-payment-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .success-message {
+            font-size: 11px;
+            color: #4CAF50;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .saved-method {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.4);
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 11px;
+            color: #4CAF50;
+            display: none;
+        }
+
+        .saved-method.show {
+            display: block;
+        }
+
+        /* --- 5. WIDGET SOCIAL PROOF --- */
+        #paymentWidget {
+            position: fixed;
+            top: 56px;
+            left: 20px;
+            background: linear-gradient(135deg, #532b66 0%, #1c1c1c 100%);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 10px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            z-index: 9998;
+            max-width: 320px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        #paymentWidget.show {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #paymentWidget.hiding {
+            opacity: 0;
+            transform: translateY(-5px);
+        }
+
+        .widget-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .widget-content {
+            flex: 1;
+        }
+
+        .widget-message {
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 2px;
+        }
+
+        .widget-name {
+            color: #FFD700;
+            font-weight: 700;
+        }
+
+        .widget-amount {
+            color: #FFD700;
+            font-weight: 700;
+        }
+
+        .widget-time {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 2px;
+        }
+
+        /* --- 6. LOADING SPINNER --- */
+        .loading-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .loading-spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-top: 2px solid #FFD700;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* --- 7. RESPONSIVE (toate @media grupate) --- */
+        @media (min-width: 600px) {
+            #discountBanner {
+                max-width: 500px;
+                left: 0;
+                right: auto;
+                top: 50%;
+                bottom: auto;
+                transform: translateY(-50%);
+                border-radius: 0 12px 12px 0;
+                margin: 0;
+            }
+
+            @keyframes slideUpFast {
+                from {
+                    opacity: 0;
+                    transform: translateY(-50%) translateX(-20px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(-50%) translateX(0);
+                }
+            }
+        }
+
+        @media (max-width: 600px) {
+            .step1-trigger-btn {
+                max-width: 360px;
+                font-size: 14px;
+                padding: 12px 18px;
+                margin: 0 auto;
+            }
+
+            #step2 {
+                max-height: 90vh;
+                padding: 12px 16px 16px 16px;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .premium-header {
+                font-size: 16px;
+                margin-bottom: 6px;
+            }
+
+            .premium-text {
+                font-size: 12px;
+                margin-bottom: 10px;
+            }
+
+            .stat-box {
+                min-width: 90px;
+                padding: 8px 6px;
+            }
+
+            .stat-value {
+                font-size: 18px;
+            }
+
+            #paymentWidget {
+                left: 10px;
+                right: 10px;
+                max-width: none;
+                padding: 10px 14px;
+            }
+
+            .widget-icon {
+                font-size: 20px;
+            }
+
+            .widget-message {
+                font-size: 12px;
+            }
+
+            .widget-time {
+                font-size: 10px;
+            }
+        }
+
+        /* --- NEW DASHBOARD TABS --- */
+        .dashboard-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 5px;
+        }
+
+        .dash-tab {
+            flex: 1;
+            padding: 10px 5px;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            font-weight: 600;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        .dash-tab.active {
+            color: #FFD700;
+            border-bottom-color: #FFD700;
+        }
+
+        .dash-view {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .dash-view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Fix Max Height on Mobile */
+        #step2 {
+            max-height: 80vh !important;
+        }
+
+        @media (max-width: 600px) {
+            #step2 {
+                padding: 15px 10px;
+            }
+        }
+
+        /* PULSING DOT (LIVE) */
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #4CAF50;
+            /* Green */
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+            animation: pulse-green 2s infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes pulse-green {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 6px rgba(76, 175, 80, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===================================================
+         WIDGET PLATI RECENTE (Social Proof)
+         =================================================== -->
+    <div id="paymentWidget">
+        <div class="widget-icon">&#127881;</div>
+        <div class="widget-content">
+            <div class="widget-message">
+                <span class="widget-name" id="widgetName">Maria</span> a primit
+                <span class="widget-amount" id="widgetAmount">50 RON</span>
+            </div>
+            <div class="widget-time" id="widgetTime">acum 2 zile</div>
+        </div>
+    </div>
+
+    <!-- ===================================================
+         BANNER DASHBOARD RECOMANDARI
+         =================================================== -->
+    <div id="discountBanner">
+        <button class="banner-close" id="closeBtn">&times;</button>
+
+        <!-- Step 1: Buton trigger -->
+        <div id="step1">
+            <button class="step1-trigger-btn" id="openDashboardBtn">
+                &#127919; Vezi link-ul tau si cat ai castigat
+            </button>
+        </div>
+
+        <!-- Step 2: Dashboard complet -->
+        <div id="step2">
+            <div class="premium-header">
+                <span class="live-dot"></span>
+                <span class="header-text-gradient"
+                    style="font-size:15px; text-transform:uppercase; letter-spacing:0.5px;">DASHBOARD RECOMANDĂRI</span>
+            </div>
+            <div class="dashboard-tabs">
+                <div class="dash-tab active" data-target="view-general">Link-ul tău</div>
+                <div class="dash-tab" data-target="view-financial">Primire plată</div>
+            </div>
+            <div id="view-general" class="dash-view active">
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <div class="stat-value" id="nrRecomandari">-</div>
+                        <div class="stat-label">Recomandari</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="sumaTotal">-</div>
+                        <div class="stat-label">RON Castigati</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="ronPrimiti">-</div>
+                        <div class="stat-label">RON Primiti</div>
+                    </div>
+                </div>
+
+                <!-- Link Referral -->
+                <div class="referral-link-container">
+                    <div class="referral-link-label">Link-ul tau de recomandare:</div>
+                    <div class="referral-link-display">
+                        <div class="referral-link-text" id="referralLink">
+                            <div class="loading-container">
+                                <div class="loading-spinner"></div>
+                                <span>Asteapta putin. Se incarca...</span>
+                            </div>
+                        </div>
+                        <button class="copy-btn" id="copyBtn">Copiaza</button>
+                    </div>
+                </div>
+
+                <!-- Metode de Plata -->
+            </div>
+            <div id="view-financial" class="dash-view">
+                <div class="payment-methods-section" id="paymentMethodsSection">
+                    <!-- Header Removed -->
+
+                    <div class="saved-method" id="savedMethod">
+                        &#10003; Ai salvat deja o metoda de plata
+                    </div>
+                    <div class="billing-section"
+                        style="margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
+
+
+                        <label class="payment-input-label">CNP (Obligatoriu pentru Persoane Fizice)</label>
+                        <input type="text" class="payment-input" id="cnpInput" placeholder="CNP-ul tau">
+
+                        <label class="payment-input-label">Adresa (Domiciliu sau Sediu)</label>
+                        <input type="text" class="payment-input" id="adresaInput"
+                            placeholder="Strada, Numar, Oras, Judet">
+
+
+
+                        <label class="payment-input-label">Denumire Firma</label>
+                        <input type="text" class="payment-input" id="firmaInput" placeholder="Nume Firma SRL/PFA">
+
+                        <label class="payment-input-label">CUI</label>
+                        <input type="text" class="payment-input" id="cuiInput" placeholder="RO...">
+                    </div>
+
+                    <div class="payment-tabs">
+                        <div class="payment-tab active" data-tab="revolut">&#128179; Revolut</div>
+                        <div class="payment-tab" data-tab="iban">&#127974; IBAN</div>
+                    </div>
+
+                    <!-- Formular Revolut -->
+                    <div class="payment-form active" id="revolutForm">
+                        <label class="payment-input-label">Nume utilizator Revolut (ex: @username)</label>
+                        <input type="text" class="payment-input" id="revolutUsername" placeholder="@username">
+                        <div class="error-message" id="revolutError">Te rugam sa introduci un username valid</div>
+                        <button class="save-payment-btn" id="saveRevolutBtn">Salveaza metoda de plata</button>
+                        <div class="success-message" id="revolutSuccess">&#10003; Salvat cu succes! Plata se face
+                            conform
+                            regulamentului.</div>
+                    </div>
+
+                    <!-- Formular IBAN -->
+                    <div class="payment-form" id="ibanForm">
+                        <label class="payment-input-label">IBAN (format romanesc)</label>
+                        <input type="text" class="payment-input" id="ibanInput"
+                            placeholder="RO49 AAAA 1B31 0075 9384 0000" maxlength="34">
+                        <div class="error-message" id="ibanError">IBAN invalid. Format corect: RO + 2 cifre + cod banca
+                        </div>
+                        <button class="save-payment-btn" id="saveIbanBtn">Salveaza metoda de plata</button>
+                        <div class="success-message" id="ibanSuccess">&#10003; Salvat cu succes! Plata se face conform
+                            regulamentului.</div>
+                    </div>
+
+                    <!-- Text Legal (Vizibil pentru ambele metode) -->
+                    <p
+                        style="font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 15px; line-height: 1.3; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+                        Prin salvarea metodei de plată, confirmi că ai citit și ești de acord cu
+                        <a href="https://docs.google.com/document/d/1Lk6-UnLYE6Pae50T3y8DNs0-vE3PLzD0VsXyYURn4Do/edit?usp=sharing"
+                            target="_blank" style="color: #FFD700; text-decoration: underline;">Regulamentul
+                            Programului</a>.
+                    </p>
+                </div>
+
+            </div>
+            <a href="https://docs.google.com/document/d/1Lk6-UnLYE6Pae50T3y8DNs0-vE3PLzD0VsXyYURn4Do/edit?usp=sharing"
+                target="_blank" class="regulament-btn">
+                &#128196; Citeste regulamentul complet
+            </a>
+
+
+        </div>
+    </div>
+    <!-- ===================================================
+         JAVASCRIPT
+         Structura:
+           1. Configurare
+           2. Verificare Acces
+           3. Validare IBAN
+           4. Incarcare Date Referral
+           5. Salvare Metoda Plata
+           6. UI: Tab-uri Plata + Formulare
+           7. UI: Banner Step1/Step2
+           8. Widget Social Proof
+           9. Protectie Continut
+          10. Initializare
+         =================================================== -->
+    <script>
+        // ===================================================
+        // 1. CONFIGURARE
+        // ===================================================
+        const SCRIPT_URL = 'https://script.google.com/macros/s/(codul meu)';
+        let currentConversii = 0;
+
+        // ===================================================
+        // 2. VERIFICARE ACCES
+        // ===================================================
+        async function verificaAcces() {
+            const userEmail = localStorage.getItem('userEmail');
+            const cnp = document.getElementById('cnpInput').value.trim();
+            const adresa = document.getElementById('adresaInput').value.trim();
+            const firma = document.getElementById('firmaInput').value.trim();
+            const cui = document.getElementById('cuiInput').value.trim();
+            const userParola = localStorage.getItem('userParola');
+
+            if (!userEmail || !userParola) {
+                window.location.href = 'https://echilibrudigital.ro/accesare';
+                return false;
+            }
+
+            try {
+                const url = `${SCRIPT_URL}?action=verificaAcces&email=${encodeURIComponent(userEmail)}&parola=${encodeURIComponent(userParola)}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (!data.acces) {
+                    alert('Datele de autentificare sunt incorecte. Te rugam sa te loghezi din nou.');
+                    localStorage.clear();
+                    window.location.href = 'https://echilibrudigital.ro/accesare';
+                    return false;
+                }
+                return true;
+            } catch (error) {
+                console.error('Eroare verificare:', error);
+                return true;
+            }
+        }
+
+        // ===================================================
+        // 3. VALIDARE IBAN
+        // ===================================================
+        function validateIBAN(iban) {
+            iban = iban.replace(/\s/g, '').toUpperCase();
+            if (!iban.startsWith('RO') || iban.length !== 24) return false;
+            if (!/^\d{2}$/.test(iban.substring(2, 4))) return false;
+
+            const rearranged = iban.substring(4) + iban.substring(0, 4);
+            const numericString = rearranged.replace(/[A-Z]/g, (char) => {
+                return (char.charCodeAt(0) - 55).toString();
+            });
+
+            let remainder = '';
+            for (let i = 0; i < numericString.length; i++) {
+                remainder += numericString[i];
+                remainder = (parseInt(remainder) % 97).toString();
+            }
+            return parseInt(remainder) === 1;
+        }
+
+        function formatIBAN(iban) {
+            iban = iban.replace(/\s/g, '').toUpperCase();
+            return iban.replace(/(.{4})/g, '$1 ').trim();
+        }
+
+        // ===================================================
+        // 4. INCARCARE DATE REFERRAL
+        // ===================================================
+        async function incarcaDateReferral() {
+            const userEmail = localStorage.getItem('userEmail');
+            const cnp = document.getElementById('cnpInput').value.trim();
+            const adresa = document.getElementById('adresaInput').value.trim();
+            const firma = document.getElementById('firmaInput').value.trim();
+            const cui = document.getElementById('cuiInput').value.trim();
+            if (!userEmail) return;
+
+            try {
+                // OPTIMIZARE VITEZA: O singura cerere care aduce TOT (link + statistici)
+                const urlLink = `${SCRIPT_URL}?action=genereazaReferral&email=${encodeURIComponent(userEmail)}`;
+                const responseLink = await fetch(urlLink);
+                const dataLink = await responseLink.json();
+
+                // Actualizeaza link referral SI statistici (din aceeasi sursa)
+                if (dataLink.success) {
+
+                    // 1. Statistici
+                    document.getElementById('nrRecomandari').textContent = dataLink.conversii || 0;
+                    document.getElementById('sumaTotal').textContent = dataLink.totalCastigat || 0;
+                    document.getElementById('ronPrimiti').textContent = dataLink.ronPrimiti || 0;
+
+                    // 2. Link Referral
+                    document.getElementById('referralLink').textContent = dataLink.referralLink;
+
+                    // 3. Afisare sectiune plati
+                    document.getElementById('paymentMethodsSection').classList.add('active');
+
+                    // 4. Metoda Plata existenta
+                    if (dataLink.metodaPlata) {
+                        document.getElementById('savedMethod').textContent =
+                            'Metoda salvata: ' + dataLink.metodaPlata + ' - ' + dataLink.detaliiPlata;
+                        document.getElementById('savedMethod').classList.add('show');
+                    }
+
+                    // 5. Pre-populare date fiscale
+                    if (dataLink.cnp) document.getElementById('cnpInput').value = dataLink.cnp;
+                    if (dataLink.adresa) document.getElementById('adresaInput').value = dataLink.adresa;
+                    if (dataLink.firma) document.getElementById('firmaInput').value = dataLink.firma;
+                    if (dataLink.cui) document.getElementById('cuiInput').value = dataLink.cui;
+
+
+                    // COPY BUTTON
+                    document.getElementById('copyBtn').addEventListener('click', function () {
+                        navigator.clipboard.writeText(dataLink.referralLink).then(() => {
+                            this.textContent = 'Copiat!';
+                            this.style.background = '#4CAF50';
+                            setTimeout(() => {
+                                this.textContent = 'Copiaza';
+                                this.style.background = '#FFD700';
+                            }, 2000);
+                        });
+                    });
+
+                } else {
+                    document.getElementById('referralLink').textContent = 'Eroare generare link';
+                    console.error('Eroare backend:', dataLink.error);
+                }
+            } catch (error) {
+                console.error('Eroare incarcare date:', error);
+                document.getElementById('nrRecomandari').textContent = '0';
+                document.getElementById('sumaTotal').textContent = '0';
+                document.getElementById('ronPrimiti').textContent = '0';
+                document.getElementById('referralLink').textContent = 'Eroare conexiune';
+            }
+        }
+
+        // ===================================================
+        // 5. SALVARE METODA PLATA
+        // ===================================================
+        async function salveazaMetodaPlata(metoda, detalii) {
+            const userEmail = localStorage.getItem('userEmail');
+            const cnp = document.getElementById('cnpInput').value.trim();
+            const adresa = document.getElementById('adresaInput').value.trim();
+            const firma = document.getElementById('firmaInput').value.trim();
+            const cui = document.getElementById('cuiInput').value.trim();
+            try {
+                const url = `${SCRIPT_URL}?action=salveazaMetodaPlata&email=${encodeURIComponent(userEmail)}&metoda=${encodeURIComponent(metoda)}&detalii=${encodeURIComponent(detalii)}&cnp=${encodeURIComponent(cnp)}&adresa=${encodeURIComponent(adresa)}&firma=${encodeURIComponent(firma)}&cui=${encodeURIComponent(cui)}`;
+                const response = await fetch(url);
+                return await response.json();
+            } catch (error) {
+                console.error('Eroare salvare:', error);
+                return { success: false, error: error.toString() };
+            }
+        }
+
+        // ===================================================
+        // 6. UI: TAB-URI PLATA + FORMULARE
+        // ===================================================
+
+        // Comutare tab-uri Revolut / IBAN
+        document.querySelectorAll('.payment-tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                const tabName = this.getAttribute('data-tab');
+                document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelectorAll('.payment-form').forEach(f => f.classList.remove('active'));
+                document.getElementById(tabName === 'revolut' ? 'revolutForm' : 'ibanForm').classList.add('active');
+            });
+        });
+
+        // Salvare Revolut
+        document.getElementById('saveRevolutBtn').addEventListener('click', async function () {
+            const username = document.getElementById('revolutUsername').value.trim();
+            const errorDiv = document.getElementById('revolutError');
+            const successDiv = document.getElementById('revolutSuccess');
+            const cnpVal = document.getElementById('cnpInput').value.trim();
+            const adresaVal = document.getElementById('adresaInput').value.trim();
+            const cuiVal = document.getElementById('cuiInput').value.trim();
+
+            errorDiv.classList.remove('show');
+            successDiv.classList.remove('show');
+
+            // VALIDARE DATE FISCALE
+            if (!adresaVal || (!cnpVal && !cuiVal)) {
+                errorDiv.textContent = 'Te rugam sa completezi Datele Fiscale (Adresa si CNP/CUI) inainte de a salva!';
+                errorDiv.classList.add('show');
+                return;
+            }
+
+            if (!username || username.length < 2) {
+                errorDiv.classList.add('show');
+                document.getElementById('revolutUsername').classList.add('error');
+                return;
+            }
+
+            document.getElementById('revolutUsername').classList.remove('error');
+            this.disabled = true;
+            this.textContent = 'Se salveaza...';
+
+            const result = await salveazaMetodaPlata('Revolut', username);
+
+            if (result.success) {
+                successDiv.classList.add('show');
+                document.getElementById('savedMethod').textContent = 'Metoda salvata: Revolut - ' + username;
+                document.getElementById('savedMethod').classList.add('show');
+                setTimeout(() => successDiv.classList.remove('show'), 3000);
+            } else {
+                errorDiv.textContent = 'Eroare la salvare. Incearca din nou.';
+                errorDiv.classList.add('show');
+            }
+
+            this.disabled = false;
+            this.textContent = 'Salveaza metoda de plata';
+        });
+
+        // Salvare IBAN
+        document.getElementById('saveIbanBtn').addEventListener('click', async function () {
+            const iban = document.getElementById('ibanInput').value.trim();
+            const errorDiv = document.getElementById('ibanError');
+            const successDiv = document.getElementById('ibanSuccess');
+            const cnpVal = document.getElementById('cnpInput').value.trim();
+            const adresaVal = document.getElementById('adresaInput').value.trim();
+            const cuiVal = document.getElementById('cuiInput').value.trim();
+
+            errorDiv.classList.remove('show');
+            successDiv.classList.remove('show');
+
+            // VALIDARE DATE FISCALE
+            if (!adresaVal || (!cnpVal && !cuiVal)) {
+                errorDiv.textContent = 'Te rugam sa completezi Datele Fiscale (Adresa si CNP/CUI) inainte de a salva!';
+                errorDiv.classList.add('show');
+                return;
+            }
+
+            if (!validateIBAN(iban)) {
+                errorDiv.classList.add('show');
+                document.getElementById('ibanInput').classList.add('error');
+                return;
+            }
+
+            document.getElementById('ibanInput').classList.remove('error');
+            this.disabled = true;
+            this.textContent = 'Se salveaza...';
+
+            const ibanFormatat = formatIBAN(iban);
+            const result = await salveazaMetodaPlata('IBAN', ibanFormatat);
+
+            if (result.success) {
+                successDiv.classList.add('show');
+                document.getElementById('savedMethod').textContent = 'Metoda salvata: IBAN - ' + ibanFormatat;
+                document.getElementById('savedMethod').classList.add('show');
+                setTimeout(() => successDiv.classList.remove('show'), 3000);
+            } else {
+                errorDiv.textContent = 'Eroare la salvare. Incearca din nou.';
+                errorDiv.classList.add('show');
+            }
+
+            this.disabled = false;
+            this.textContent = 'Salveaza metoda de plata';
+        });
+
+        // Formatare live IBAN
+        document.getElementById('ibanInput').addEventListener('input', function () {
+            let value = this.value.replace(/\s/g, '').toUpperCase();
+            if (value.length > 0) this.value = formatIBAN(value);
+        });
+
+        // ===================================================
+        // 7. UI: BANNER STEP1/STEP2
+        // ===================================================
+        const banner = document.getElementById('discountBanner');
+        const closeBtn = document.getElementById('closeBtn');
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const openDashboardBtn = document.getElementById('openDashboardBtn');
+        const isDesktop = () => window.innerWidth >= 600;
+
+        const minimizeToStep1 = () => {
+            step2.style.display = 'none';
+            step1.style.display = 'flex';
+            closeBtn.classList.remove('show');
+            banner.style.transform = isDesktop() ? 'translateY(-50%)' : 'translateY(0)';
+        };
+
+        const deschideStep2 = () => {
+            step1.style.display = 'none';
+            step2.style.display = 'block';
+            closeBtn.classList.add('show');
+            if (isDesktop()) {
+                banner.style.transform = 'translateY(-50%)';
+            } else {
+                banner.style.transform = 'translateY(0)';
+                step2.scrollTop = 0;
+            }
+        };
+
+        openDashboardBtn.addEventListener('click', deschideStep2);
+        closeBtn.addEventListener('click', minimizeToStep1);
+
+        // Functie globala - apelabila din alte pagini
+        window.openDashboardRecomandari = function () {
+            if (!banner.classList.contains('show')) {
+                banner.classList.add('show');
+            }
+            deschideStep2();
+        };
+
+        // ===================================================
+        // 8. WIDGET SOCIAL PROOF (Plati Recente)
+        // ===================================================
+        let ultimelePlati = [];
+        let widgetCurrentIndex = 0;
+        let widgetInterval = null;
+
+        async function incarcaUltimelePlati() {
+            try {
+                const url = `${SCRIPT_URL}?action=getUltimele3Plati`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.success && data.plati && data.plati.length > 0) {
+                    ultimelePlati = data.plati;
+                    startWidgetRotation();
+                } else {
+                    console.log('Nu exista plati recente de afisat');
+                }
+            } catch (error) {
+                console.error('Eroare incarcare plati:', error);
+            }
+        }
+
+        function startWidgetRotation() {
+            if (ultimelePlati.length === 0) return;
+            afiseazaPlata(0);
+            if (ultimelePlati.length > 1) {
+                widgetInterval = setInterval(schimbaLaUrmatoareaPlata, 5000);
+            }
+        }
+
+        function schimbaLaUrmatoareaPlata() {
+            const widget = document.getElementById('paymentWidget');
+            widget.classList.add('hiding');
+            setTimeout(() => {
+                widgetCurrentIndex = (widgetCurrentIndex + 1) % ultimelePlati.length;
+                const plata = ultimelePlati[widgetCurrentIndex];
+                document.getElementById('widgetName').textContent = plata.prenume;
+                document.getElementById('widgetAmount').textContent = plata.suma + ' RON';
+                document.getElementById('widgetTime').textContent = plata.timpText;
+                widget.classList.remove('hiding');
+            }, 500);
+        }
+
+        function afiseazaPlata(index) {
+            if (!ultimelePlati[index]) return;
+            const plata = ultimelePlati[index];
+            const widget = document.getElementById('paymentWidget');
+            document.getElementById('widgetName').textContent = plata.prenume;
+            document.getElementById('widgetAmount').textContent = plata.suma + ' RON';
+            document.getElementById('widgetTime').textContent = plata.timpText;
+            if (!widget.classList.contains('show')) widget.classList.add('show');
+        }
+
+        function stopWidgetRotation() {
+            if (widgetInterval) { clearInterval(widgetInterval); widgetInterval = null; }
+        }
+
+        // ===================================================
+        // 9. PROTECTIE CONTINUT
+        // ===================================================
+
+        // Protectie video
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('video').forEach(video => {
+                video.removeAttribute('download');
+                video.controlsList = 'nodownload noremoteplayback';
+                video.addEventListener('contextmenu', e => { e.preventDefault(); return false; });
+                video.addEventListener('dragstart', e => { e.preventDefault(); return false; });
+            });
+            document.querySelectorAll('iframe[src*="youtube"], iframe[src*="vimeo"], iframe[src*="video"]').forEach(iframe => {
+                iframe.addEventListener('contextmenu', e => { e.preventDefault(); return false; });
+            });
+        });
+
+        // Protectie text: click dreapta, selectare, copiere, taiere, drag
+        document.addEventListener('contextmenu', e => { e.preventDefault(); return false; });
+        document.addEventListener('selectstart', e => { e.preventDefault(); return false; });
+        document.addEventListener('copy', e => { e.preventDefault(); return false; });
+        document.addEventListener('cut', e => { e.preventDefault(); return false; });
+        document.addEventListener('dragstart', e => { e.preventDefault(); return false; });
+
+        // Protectie taste: Ctrl+C/X/A/S/P/U
+        document.addEventListener('keydown', function (e) {
+            if (e.ctrlKey && ['c', 'x', 'a', 's', 'p', 'u'].includes(e.key.toLowerCase())) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // ===================================================
+        // 10. INITIALIZARE
+        // ===================================================
+        (async function init() {
+            banner.classList.add('show');
+            const areAcces = await verificaAcces();
+            if (!areAcces) return;
+            await incarcaDateReferral();
+        })();
+
+        // Widget social proof - delay 2s dupa incarcare pagina
+        setTimeout(incarcaUltimelePlati, 2000);
+        // --- TABS LOGIC ---
+        document.querySelectorAll('.dash-tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                // Remove active classes
+                document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.dash-view').forEach(v => v.classList.remove('active'));
+
+                // Add active class
+                this.classList.add('active');
+                const targetId = this.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>

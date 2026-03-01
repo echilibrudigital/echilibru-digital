@@ -1,0 +1,298 @@
+<!--
+  ===================================================
+  ECHILIBRU DIGITAL - PAGINA ALEGE CURS (REORGANIZAT)
+  Selector cursuri cu verificare acces API
+  ===================================================
+-->
+
+<style>
+    /* ===================================================
+       PAGINA ALEGE CURS (REORGANIZAT)
+       ===================================================
+       Structura CSS:
+         1. Reset
+         2. Layout Selector
+         3. Course Cards
+         4. Logout
+         5. Responsive
+       =================================================== */
+
+    /* --- 1. RESET --- */
+    body {
+        background: #0f0f0f;
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* --- 2. LAYOUT SELECTOR --- */
+    .course-selector {
+        max-width: 900px;
+        margin: 80px auto;
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+    .course-selector h1 {
+        color: #ffffff;
+        font-size: 42px;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+
+    .course-selector .subtitle {
+        color: #b8b8d1;
+        font-size: 20px;
+        margin-bottom: 60px;
+    }
+
+    .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 40px;
+        margin-top: 50px;
+    }
+
+    /* --- 3. COURSE CARDS --- */
+    .course-card {
+        background: linear-gradient(135deg, #1c1c1c 0%, #532b66 100%);
+        padding: 50px 35px;
+        border-radius: 25px;
+        box-shadow: 0 0px 0px rgba(89, 49, 105, 0.4);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+        text-decoration: none;
+        display: block;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .course-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .course-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 0px 0px rgba(89, 49, 105, 0.6);
+    }
+
+    .course-card:hover::before {
+        opacity: 1;
+    }
+
+    .course-icon {
+        font-size: 70px;
+        margin-bottom: 25px;
+        display: block;
+    }
+
+    .course-card h2 {
+        color: #ffffff;
+        font-size: 30px;
+        margin-bottom: 15px;
+        font-weight: bold;
+        position: relative;
+        z-index: 1;
+    }
+
+    .course-card p {
+        color: #e8dff0;
+        font-size: 17px;
+        line-height: 1.6;
+        margin-bottom: 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    .arrow-icon {
+        font-size: 24px;
+        margin-top: 20px;
+        display: inline-block;
+        transition: transform 0.3s ease;
+    }
+
+    .course-card:hover .arrow-icon {
+        transform: translateX(5px);
+    }
+
+    /* --- 4. LOGOUT --- */
+    .logout-btn {
+        margin-top: 50px;
+        padding: 12px 30px;
+        background: #0f0f0f;
+        color: #0f0f0f;
+        border: 2px solid #0f0f0f;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .logout-btn:hover {
+        background: #0f0f0f;
+        color: #0f0f0f;
+        border-color: #0f0f0f;
+    }
+
+    /* --- 5. RESPONSIVE --- */
+    @media (max-width: 768px) {
+        .course-selector {
+            margin: 50px auto;
+            padding: 30px 15px;
+        }
+
+        .course-selector h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .course-selector .subtitle {
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+        .courses-grid {
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .course-card {
+            padding: 40px 25px;
+        }
+
+        .course-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .course-card h2 {
+            font-size: 26px;
+        }
+
+        .course-card p {
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .course-selector h1 {
+            font-size: 28px;
+        }
+
+        .course-selector .subtitle {
+            font-size: 16px;
+        }
+
+        .course-card {
+            padding: 35px 20px;
+        }
+    }
+</style>
+
+<!-- HTML -->
+<div class="course-selector">
+    <h1 id="welcomeTitle">Bine ai revenit! 🎉</h1>
+    <p class="subtitle" id="welcomeMessage">Ai acces la următoarele cursuri:</p>
+    <div class="courses-grid" id="coursesGrid">
+        <!-- Cardurile se genereaza dinamic din JavaScript -->
+    </div>
+    <a href="https://echilibrudigital.ro/accesare" class="logout-btn" onclick="localStorage.clear()"></a>
+</div>
+
+<!-- ===================================================
+     JAVASCRIPT
+     Structura:
+       1. Configurare
+       2. verificaSiAfiseazaCursuri()
+       3. afiseazaCursuri()
+       4. Initializare
+     =================================================== -->
+<script>
+    // 1. CONFIGURARE
+    const SCRIPT_URL = 'https://script.google.com/macros/s/(codul meu)';
+
+    // 2. VERIFICARE SI AFISARE CURSURI
+    async function verificaSiAfiseazaCursuri() {
+        const userEmail = localStorage.getItem('userEmail');
+        const userParola = localStorage.getItem('userParola');
+        const userName = localStorage.getItem('userName') || 'Client';
+
+        if (!userEmail || !userParola) {
+            alert('Te rugăm să te autentifici mai întâi.');
+            window.location.href = 'https://echilibrudigital.ro/accesare';
+            return;
+        }
+
+        document.getElementById('welcomeTitle').textContent = `Bine ai revenit, ${userName}! 🎉`;
+
+        const accesCurs1 = localStorage.getItem('accesCurs1') === 'true';
+        const accesCurs2 = localStorage.getItem('accesCurs2') === 'true';
+
+        try {
+            const url = `${SCRIPT_URL}?action=verificaAcces&email=${encodeURIComponent(userEmail)}&parola=${encodeURIComponent(userParola)}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (!data.acces) {
+                alert('Sesiunea ta a expirat. Te rugăm să te loghezi din nou.');
+                localStorage.clear();
+                window.location.href = 'https://echilibrudigital.ro/accesare';
+                return;
+            }
+
+            localStorage.setItem('accesCurs1', data.acces_curs1 ? 'true' : 'false');
+            localStorage.setItem('accesCurs2', data.acces_curs2 ? 'true' : 'false');
+            afiseazaCursuri(data.acces_curs1, data.acces_curs2);
+        } catch (error) {
+            console.error('Eroare verificare:', error);
+            afiseazaCursuri(accesCurs1, accesCurs2);
+        }
+    }
+
+    // 3. AFISARE CURSURI (Generare HTML)
+    function afiseazaCursuri(accesCurs1, accesCurs2) {
+        const grid = document.getElementById('coursesGrid');
+        grid.innerHTML = '';
+
+        if (accesCurs1) {
+            grid.innerHTML += `
+            <a href="https://echilibrudigital.ro/testul-sincer" class="course-card">
+                <div class="course-icon">📱</div>
+                <h2>Echilibru Digital</h2>
+                <p>Nu trebuie să renunți la telefon, ci doar să-ți recapeți controlul.</p>
+                <div class="arrow-icon">→</div>
+            </a>`;
+        }
+
+        if (accesCurs2) {
+            grid.innerHTML += `
+            <a href="https://echilibrudigital.ro/lectia1" class="course-card">
+                <div class="course-icon">👪</div>
+                <h2>Ghidul Părintelui</h2>
+                <p>Cum să crești un copil liber și fericit într-o lume extrem de conectată.</p>
+                <div class="arrow-icon">→</div>
+            </a>`;
+        }
+
+        if (!accesCurs1 && !accesCurs2) {
+            grid.innerHTML = `
+            <div style="color: #ff6b6b; padding: 40px; text-align: center;">
+                <h2>⚠️ Nu ai acces la niciun curs</h2>
+                <p>Te rugăm să achiziționezi un curs pentru a continua.</p>
+                <a href="https://echilibrudigital.ro/" style="color: #593169; text-decoration: underline;">Înapoi la pagina principală</a>
+            </div>`;
+        }
+    }
+
+    // 4. INITIALIZARE
+    verificaSiAfiseazaCursuri();
+</script>
